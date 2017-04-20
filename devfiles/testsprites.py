@@ -20,9 +20,9 @@ import spritesheet
 
 ''' ---------- Only Edit These Lines ---------- '''
 
-spriteSheetPath = "../link.gif"
-spriteTuple = (200,10,16,26)
-spriteColorKey = (0,0,0)
+spriteSheetPath = "../images/cyndaquil.png"
+spriteTuple = (165, 120, 15, 19)
+spriteColorKey = (0,128,128)
 
 ''' ------------------------------------------- '''
 
