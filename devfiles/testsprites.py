@@ -21,7 +21,7 @@ import spritesheet
 ''' ---------- Only Edit These Lines ---------- '''
 
 spriteSheetPath = "../images/cyndaquil.png"
-spriteTuple = (165, 120, 15, 19)
+spriteTuple = (379, 137, 17, 18)
 spriteColorKey = (0,128,128)
 
 ''' ------------------------------------------- '''
