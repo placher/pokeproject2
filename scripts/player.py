@@ -29,14 +29,16 @@ class Player(pygame.sprite.Sprite):
 		self.currentFrame = 0
 		# initialize next frame counter for tracking walking frame transition
 		self.nextFrameCounter = 0
+		# initialize default duration for a single frame
+		self.frameDuration = 4
 		# initialize tracker to reset walking frames upon direction change
 		self.directionChange = False;
 		# initialize tracker to properly set idle sprite to correct direction
 		self.lastDirection = "Right"
 		# initialize boolean fire animation tracker
 		self.attacking = False
-		# initialize tracker for frames of attack animation
-		self.attackCount = 0
+		# initialize hitpoint tracker
+		self.hp = 5
 		
 		''' ---------- Write Image Defaults Based on Player # ---------- '''
 		
@@ -47,11 +49,11 @@ class Player(pygame.sprite.Sprite):
 			# spritesheet colorkey
 			colorkey = (0, 128, 128)
 			# idle animation rectangles
-			idleDownRects =		[(63, 24, 15, 17),	(83, 25, 15, 15),	(63, 24, 15, 17)]
-			idleUpRects =		[(64, 45, 15, 21),	(85, 46, 15, 20),	(64, 45, 15, 21)]
-			idleLeftRects =		[(60, 75, 19, 18),	(83, 75, 19, 16),	(60, 75, 19, 18)]
-			idleDownLeftRects =	[(65, 99, 16, 17),	(86, 99, 16, 15),	(65, 99, 16, 17)]
-			idleUpLeftRects =	[(68, 122, 16, 20),	(89, 123, 17, 18),	(68, 122, 16, 20)]
+			idleDownRects =			[(63, 24, 15, 17),	(83, 25, 15, 15),	(63, 24, 15, 17)]
+			idleUpRects =			[(64, 45, 15, 21),	(85, 46, 15, 20),	(64, 45, 15, 21)]
+			idleLeftRects =			[(60, 75, 19, 18),	(83, 75, 19, 16),	(60, 75, 19, 18)]
+			idleDownLeftRects =		[(65, 99, 16, 17),	(86, 99, 16, 15),	(65, 99, 16, 17)]
+			idleUpLeftRects =		[(68, 122, 16, 20),	(89, 123, 17, 18),	(68, 122, 16, 20)]
 			# movement animation rectangles
 			movementDownRects =		[(123, 25, 12, 18),		(142, 25, 15, 17),	(165, 25, 12, 18),	(142, 25, 15, 17)]
 			movementUpRects =		[(122, 46, 13, 21),		(143, 46, 15, 21),	(163, 46, 13, 21),	(143, 46, 15, 21)]
@@ -73,6 +75,9 @@ class Player(pygame.sprite.Sprite):
 		
 		# load sprite sheet
 		ss = spritesheet.spritesheet(sheet)
+		
+		''' --- Idle Images --- '''
+		
 		# idle down
 		buffer = ss.images_at(idleDownRects, colorkey)
 		self.idleDown = [pygame.transform.scale2x(image) for image in buffer]
@@ -94,7 +99,9 @@ class Player(pygame.sprite.Sprite):
 		self.idleUpLeft = [pygame.transform.scale2x(image) for image in buffer]
 		# idle up right
 		self.idleUpRight = [pygame.transform.flip(image, True, False) for image in self.idleDownLeft]
-
+		
+		''' --- Movement Images --- '''
+		
 		# movement down
 		buffer = ss.images_at(movementDownRects, colorkey)
 		self.movementDown = [pygame.transform.scale2x(image) for image in buffer]
@@ -107,7 +114,7 @@ class Player(pygame.sprite.Sprite):
 		# movement right
 		self.movementRight = [pygame.transform.flip(image, True, False) for image in self.movementLeft]
 		# movement down left
-		buffer = ss.images_at(movement, colorkey)
+		buffer = ss.images_at(movementDownLeftRects, colorkey)
 		self.movementDownLeft = [pygame.transform.scale2x(image) for image in buffer]
 		# movement down right
 		self.movementDownRight = [pygame.transform.flip(image, True, False) for image in self.movementDownLeft]
@@ -116,3 +123,255 @@ class Player(pygame.sprite.Sprite):
 		self.movementUpLeft = [pygame.transform.scale2x(image) for image in buffer]
 		# movement up right
 		self.movementUpRight = [pygame.transform.flip(image, True, False) for image in self.movementUpLeft]
+		
+		''' --- Attack Images --- '''
+		
+		# attack down
+		buffer = ss.images_at(attackDownRects, colorkey)
+		self.attackDown = [pygame.transform.scale2x(image) for image in buffer]
+		# attack up
+		buffer = ss.images_at(attackUpRects, colorkey)
+		self.attackUp = [pygame.transform.scale2x(image) for image in buffer]
+		# attack left
+		buffer = ss.images_at(attackLeftRects, colorkey)
+		self.attackLeft = [pygame.transform.scale2x(image) for image in buffer]
+		# attack right
+		self.attackRight = [pygame.transform.flip(image, True, False) for image in self.attackLeft]
+		# attack down left
+		buffer = ss.images_at(attackDownLeftRects, colorkey)
+		self.attackDownLeft = [pygame.transform.scale2x(image) for image in buffer]
+		# attack down right
+		self.attackDownRight = [pygame.transform.flip(image, True, False) for image in self.attackDownLeft]
+		# attack up left
+		buffer = ss.images_at(attackUpLeftRects, colorkey)
+		self.attackUpLeft = [pygame.transform.scale2x(image) for image in buffer]
+		# attack up right
+		self.attackUpRight = [pygame.transform.flip(image, True, False) for image in self.attackUpLeft]
+
+		''' ---------- Initialize Render Defaults ---------- '''
+
+		# initialize image and set default
+		self.image = self.idleRight[0]
+		# initialize render rectangle
+		self.rect = self.image.get_rect(center=(125,80))
+
+	def update(self):
+		
+		''' tick() Function Renamed for Compatability with pygame Sprite Groups ''' 
+
+		''' ---------- Preliminary Data Collection ---------- '''
+		
+		# get current postion of the sprite
+		pos = self.rect.center
+
+		''' ---------- Attacking Sprite Update ---------- '''
+		
+		if self.attacking:
+			self.nextFrameCounter += 1
+			self.move = [0,0]
+			# cycle to next image in animation after self.frameDuration cycles
+			if self.nextFrameCounter % self.frameDuration == 0:
+				if self.lastDirection == "Right":
+					self.image = self.attackRight[self.currentFrame]
+				elif self.lastDirection == "Left":
+					self.image = self.attackLeft[self.currentFrame]
+				elif self.lastDirection == "Up":
+					self.image = self.attackUp[self.currentFrame]
+				elif self.lastDirection == "Down":
+					self.image = self.attackDown[self.currentFrame]
+				elif self.lastDirection == "UpRight":
+					self.image = self.attackUpRight[self.currentFrame]
+				elif self.lastDirection == "UpLeft":
+					self.image = self.attackUpLeft[self.currentFrame]
+				elif self.lastDirection == "DownRight":
+					self.image= self.attackDownRight[self.currentFrame]
+				elif self.lastDirection == "DownLeft":
+					self.image = self.attackDownLeft[self.currentFrame]
+				# increment frame counter
+				self.currentFrame += 1
+				# check if animation has ended
+				if self.currentFrame > 4:
+					self.nextFrameCounter = 0
+					self.currentFrame = 0
+					self.attacking = False
+					self.walking = 0
+		# correct walking tracker bug that can occur on transition from attacking
+		if self.walking < 0 :
+			self.walking = 0
+		
+		''' ---------- Walking Sprite Update ---------- '''
+
+		if self.walking and not self.attacking:
+			self.nextFrameCounter += 1
+			# reset tracking variables if sprite changed direction
+			if self.directionChange:
+				self.nextFrameCounter = 0
+				self.currentFrame = 0
+				self.directionChange = False
+			# advance animation to next frame cooresponding to movement direction
+			if self.move == [self.moveSpeed,0]:
+				self.lastDirection = "Right"
+				# cycle to next image in animation after self.frameDuration cycles
+				if self.nextFrameCounter % self.frameDuration == 0:
+					self.image = self.movementRight[self.currentFrame]
+					self.currentFrame += 1
+					# loop back to begining of animation if last frame reached
+					if self.currentFrame > 3:
+						self.currentFrame = 0
+			elif self.move == [-self.moveSpeed,0]:
+				self.lastDirection = "Left"
+				# cycle to next image in animation after self.frameDuration cycles
+				if self.nextFrameCounter % self.frameDuration == 0:
+					self.image = self.movementLeft[self.currentFrame]
+					self.currentFrame += 1
+					# loop back to begining of animation if last frame reached
+					if self.currentFrame > 3:
+						self.currentFrame = 0
+			elif self.move == [0,-self.moveSpeed]:
+				self.lastDirection = "Up"
+				# cycle to next image in animation after self.frameDuration cycles
+				if self.nextFrameCounter % self.frameDuration == 0:
+					self.image = self.movementUp[self.currentFrame]
+					self.currentFrame += 1
+					# loop back to begining of animation if last frame reached
+					if self.currentFrame > 3:
+						self.currentFrame = 0
+			elif self.move == [0,self.moveSpeed]:
+				self.lastDirection = "Down"
+				# cycle to next image in animation after self.frameDuration cycles
+				if self.nextFrameCounter % self.frameDuration == 0:
+					self.image = self.movementDown[self.currentFrame]
+					self.currentFrame += 1
+					# loop back to begining of animation if last frame reached
+					if self.currentFrame > 3:
+						self.currentFrame = 0
+			elif self.move == [self.moveSpeed,-self.moveSpeed]:
+				self.lastDirection = "UpRight"
+				# cycle to next image in animation after self.frameDuration cycles
+				if self.nextFrameCounter % self.frameDuration == 0:
+					self.image = self.movementUpRight[self.currentFrame]
+					self.currentFrame += 1
+					# loop back to begining of animation if last frame reached
+					if self.currentFrame > 3:
+						self.currentFrame = 0
+			elif self.move == [-self.moveSpeed,-self.moveSpeed]:
+				self.lastDirection = "UpLeft"
+				# cycle to next image in animation after self.frameDuration cycles
+				if self.nextFrameCounter % self.frameDuration == 0:
+					self.image = self.movementUpLeft[self.currentFrame]
+					self.currentFrame += 1
+					# loop back to begining of animation if last frame reached
+					if self.currentFrame > 3:
+						self.currentFrame = 0
+			elif self.move == [self.moveSpeed,self.moveSpeed]:
+				self.lastDirection = "DownRight"
+				# cycle to next image in animation after self.frameDuration cycles
+				if self.nextFrameCounter % self.frameDuration == 0:
+					self.image = self.movementDownRight[self.currentFrame]
+					self.currentFrame += 1
+					# loop back to begining of animation if last frame reached
+					if self.currentFrame > 3:
+						self.currentFrame = 0
+			elif self.move == [-self.moveSpeed,self.moveSpeed]:
+				self.lastDirection = "Up"
+				# cycle to next image in animation after self.frameDuration cycles
+				if self.nextFrameCounter % self.frameDuration == 0:
+					self.image = self.movementUp[self.currentFrame]
+					self.currentFrame += 1
+					# loop back to begining of animation if last frame reached
+					if self.currentFrame > 3:
+						self.currentFrame = 0
+
+		''' ---------- Idle Animation Update ---------- '''
+
+		if not self.walking and not self.attacking:
+			self.nextFrameCounter += 1
+			# cycle to next image in animation after self.frameDuration cycles
+			if self.nextFrameCounter % self.frameDuration == 0:
+				if self.lastDirection == "Right":
+					self.image = self.idleRight[self.currentFrame]
+				elif self.lastDirection == "Left":
+					self.image = self.idleLeft[self.currentFrame]
+				elif self.lastDirection == "Up":
+					self.image = self.idleUp[self.currentFrame]
+				elif self.lastDirection == "Down":
+					self.image = self.idleDown[self.currentFrame]
+				elif self.lastDirection == "UpRight":
+					self.image = self.idleUpRight[self.currentFrame]
+				elif self.lastDirection == "UpLeft":
+					self.image = self.idleUpLeft[self.currentFrame]
+				elif self.lastDirection == "DownRight":
+					self.image= self.idleDownRight[self.currentFrame]
+				elif self.lastDirection == "DownLeft":
+					self.image = self.idleDownLeft[self.currentFrame]
+				# increment frame counter
+				self.currentFrame += 1
+				# check if animation has ended
+				if self.currentFrame > 2:
+					self.nextFrameCounter = 0
+					self.currentFrame = 0
+
+		''' ---------- Update and Move Image ---------- '''
+
+		# get new rectangle for the updated image, centered on original position
+		self.rect = self.image.get_rect(center=pos)
+		# move sprite
+		self.rect.move(self.move)
+
+		''' ---------- Obstacle Collision Detection ---------- '''
+
+		# "bounce" sprite off of a side if it has collided with the edge of the screen
+		if self.rect.left < -2 or self.rect.right > self.size[0] + 2:
+			self.rect = self.rect.move([-self.move[0],self.move[1]])
+		if self.rect.top < -2 or self.rect.bottom > self.size[1] + 2:
+			self.rect = self.rect.move([self.move[0],-self.move[1]])
+
+	def keyPressed(self, event):
+		
+		''' Parse KeyDown Event to Start Moving '''
+			
+		if event.key == K_UP:
+			self.walking += 1
+			self.move[1] = -self.moveSpeed
+			self.directionChange = True
+		elif event.key == K_DOWN:
+			self.walking += 1
+			self.move[1] = self.moveSpeed
+			self.directionChange = True
+		elif event.key == K_LEFT:
+			self.walking += 1
+			self.move[0] = -self.moveSpeed
+			self.directionChange = True
+		elif event.key == K_RIGHT:
+			self.walking += 1
+			self.move[0] = self.moveSpeed
+			self.directionChange = True
+
+	def keyReleased(self, event):
+		
+		''' Parse KeyUp Event to Stop Moving '''
+			
+		if event.key == K_UP:
+			self.walking -= 1
+			self.move[1] = 0
+		elif event.key == K_DOWN:
+			self.walking -= 1
+			self.move[1] = 0
+		elif event.key == K_LEFT:
+			self.walking -= 1
+			self.move[0] = 0
+		elif event.key == K_RIGHT:
+			self.walking -= 1
+			self.move[0] = 0
+
+	def attack(self):
+	
+		''' Place Player Object in Attack State '''
+		
+		self.attacking = True
+		self.nextFrameCounter = 0
+		self.currentFrame = 0
+		self.walking = 0
+
+
+
