@@ -1,7 +1,7 @@
 import sys
 import pygame
 from pygame.locals import *
-import spritesheet
+from scripts import spritesheet
 
 class Player(pygame.sprite.Sprite):
 	
@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
 		# initialize next frame counter for tracking walking frame transition
 		self.nextFrameCounter = 0
 		# initialize default duration for a single frame
-		self.frameDuration = 4
+		self.frameDuration = 8
 		# initialize tracker to reset walking frames upon direction change
 		self.directionChange = False;
 		# initialize tracker to properly set idle sprite to correct direction
@@ -162,7 +162,7 @@ class Player(pygame.sprite.Sprite):
 		''' ---------- Preliminary Data Collection ---------- '''
 		
 		# get current postion of the sprite
-		pos = self.rect.center
+		playerX, playerY = self.rect.center
 
 		''' ---------- Attacking Sprite Update ---------- '''
 		
@@ -273,10 +273,10 @@ class Player(pygame.sprite.Sprite):
 					if self.currentFrame > 3:
 						self.currentFrame = 0
 			elif self.move == [-self.moveSpeed,self.moveSpeed]:
-				self.lastDirection = "Up"
+				self.lastDirection = "DownLeft"
 				# cycle to next image in animation after self.frameDuration cycles
 				if self.nextFrameCounter % self.frameDuration == 0:
-					self.image = self.movementUp[self.currentFrame]
+					self.image = self.movementDownLeft[self.currentFrame]
 					self.currentFrame += 1
 					# loop back to begining of animation if last frame reached
 					if self.currentFrame > 3:
@@ -287,7 +287,7 @@ class Player(pygame.sprite.Sprite):
 		if not self.walking and not self.attacking:
 			self.nextFrameCounter += 1
 			# cycle to next image in animation after self.frameDuration cycles
-			if self.nextFrameCounter % self.frameDuration == 0:
+			if self.nextFrameCounter % (self.frameDuration*4) == 0:
 				if self.lastDirection == "Right":
 					self.image = self.idleRight[self.currentFrame]
 				elif self.lastDirection == "Left":
@@ -314,9 +314,9 @@ class Player(pygame.sprite.Sprite):
 		''' ---------- Update and Move Image ---------- '''
 
 		# get new rectangle for the updated image, centered on original position
-		self.rect = self.image.get_rect(center=pos)
+		self.rect = self.image.get_rect(center=[playerX,playerY])
 		# move sprite
-		self.rect.move(self.move)
+		self.rect = self.rect.move(self.move)
 
 		''' ---------- Obstacle Collision Detection ---------- '''
 
@@ -354,15 +354,19 @@ class Player(pygame.sprite.Sprite):
 		if event.key == K_UP:
 			self.walking -= 1
 			self.move[1] = 0
+			self.currentFrame = 0
 		elif event.key == K_DOWN:
 			self.walking -= 1
 			self.move[1] = 0
+			self.currentFrame = 0
 		elif event.key == K_LEFT:
 			self.walking -= 1
 			self.move[0] = 0
+			self.currentFrame = 0
 		elif event.key == K_RIGHT:
 			self.walking -= 1
 			self.move[0] = 0
+			self.currentFrame = 0
 
 	def attack(self):
 	
