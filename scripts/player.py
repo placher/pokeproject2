@@ -3,6 +3,12 @@ import pygame
 from pygame.locals import *
 from scripts import spritesheet
 
+# relative path compatability for different execution directories
+if 'test' in sys.argv[0]:
+	PATH = '../images/'
+else:
+	PATH = 'images/'
+
 class Player(pygame.sprite.Sprite):
 	
 	''' --- General Class for a Player Sprite --- '''
@@ -45,7 +51,7 @@ class Player(pygame.sprite.Sprite):
 		# player 1 information
 		if self.playerNum == 1:
 			# relative path to spritesheet
-			sheet = '../images/cyndaquil.png'
+			sheet = PATH+'cyndaquil.png'
 			# spritesheet colorkey
 			colorkey = (0, 128, 128)
 			# idle animation rectangles
@@ -320,11 +326,8 @@ class Player(pygame.sprite.Sprite):
 
 		''' ---------- Obstacle Collision Detection ---------- '''
 
-		# "bounce" sprite off of a side if it has collided with the edge of the screen
-		if self.rect.left < -2 or self.rect.right > self.size[0] + 2:
-			self.rect = self.rect.move([-self.move[0],self.move[1]])
-		if self.rect.top < -2 or self.rect.bottom > self.size[1] + 2:
-			self.rect = self.rect.move([self.move[0],-self.move[1]])
+		# call collision detection function
+		self.collisionDetection()
 
 	def keyPressed(self, event):
 		
@@ -376,6 +379,49 @@ class Player(pygame.sprite.Sprite):
 		self.nextFrameCounter = 0
 		self.currentFrame = 0
 		self.walking = 0
+
+	def collisionDetection(self):
+		
+		''' Collision Detection for Walls and Water Objects on Background '''
+
+		''' ---------- Directional Macros ---------- '''
+		
+		LEFT = [-self.moveSpeed, 0]
+		RIGHT = [self.moveSpeed, 0]
+		UP = [0, -self.moveSpeed]
+		DOWN = [0, self.moveSpeed]
+
+		''' ---------- Maximum Border Bounds ---------- '''
+		
+		# far left wall
+		if self.rect.left < 49: self.rect = self.rect.move(RIGHT)
+		# far right wall
+		if self.rect.right > 911: self.rect = self.rect.move(LEFT)
+		# far top wall
+		if self.rect.top < 49: self.rect = self.rect.move(DOWN)
+		# far bottom wall
+		if self.rect.bottom > 671: self.rect = self.rect.move(UP)
+
+		''' ---------- Top Left Corner ---------- '''
+
+		# far left bottom
+		if self.rect.left < 195 and self.rect.bottom > 240 and self.rect.bottom < 245: self.rect = self.rect.move(UP)
+		# lower well left
+		if self.rect.left < 196 and self.rect.left > 185 and self.rect.bottom > 242 and self.rect.bottom < 345: self.rect = self.rect.move(RIGHT)
+		# lower well bottom
+		if self.rect.left > 185 and self.rect.right < 300 and self.rect.bottom < 350 and self.rect.bottom > 339: self.rect = self.rect.move(UP)
+		# lower well right
+		if self.rect.right > 290 and self.rect.right < 306 and self.rect.bottom < 350 and self.rect.top > 180: self.rect = self.rect.move(LEFT)
+		# lower well top from within well
+		if self.rect.right > 240 and self.rect.right < 300 and self.rect.top > 180 and self.rect.top < 193: self.rect = self.rect.move(DOWN)
+		# lower well top from left
+		if self.rect.right > 239 and self.rect.right < 250 and self.rect.bottom > 144 and self.rect.top < 193: self.rect = self.rect.move(LEFT)
+		# lower well top from above
+		if self.rect.right > 239 and self.rect.left < 335 and self.rect.bottom > 144 and self.rect.bottom < 160: self.rect = self.rect.move(UP)
+		# exit to central right wall
+		if self.rect.right > 433 and self.rect.right < 450 and self.rect.top < 193: self.rect = self.rect.move(LEFT)
+
+
 
 
 
