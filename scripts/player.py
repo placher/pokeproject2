@@ -104,7 +104,7 @@ class Player(pygame.sprite.Sprite):
 		buffer = ss.images_at(idleUpLeftRects, colorkey)
 		self.idleUpLeft = [pygame.transform.scale2x(image) for image in buffer]
 		# idle up right
-		self.idleUpRight = [pygame.transform.flip(image, True, False) for image in self.idleDownLeft]
+		self.idleUpRight = [pygame.transform.flip(image, True, False) for image in self.idleUpLeft]
 		
 		''' --- Movement Images --- '''
 		
@@ -420,6 +420,33 @@ class Player(pygame.sprite.Sprite):
 		if self.rect.right > 239 and self.rect.left < 335 and self.rect.bottom > 144 and self.rect.bottom < 160: self.rect = self.rect.move(UP)
 		# exit to central right wall
 		if self.rect.right > 433 and self.rect.right < 450 and self.rect.top < 193: self.rect = self.rect.move(LEFT)
+
+		''' ---------- Left Central ---------- '''
+
+		# left u-shaped wall
+		if self.rect.left < 337 and self.rect.left > 320 and self.rect.bottom > 144 and self.rect.top < 529: self.rect = self.rect.move(RIGHT)
+		# left u-shaped wall block from right
+		if self.rect.left < 384 and self.rect.left > 365 and self.rect.bottom > 337 and self.rect.top < 384: self.rect = self.rect.move(RIGHT)
+		# left u-shaped wall block from above
+		if self.rect.left < 384 and self.rect.left > 320 and self.rect.bottom > 336 and self.rect.bottom < 360: self.rect = self.rect.move(UP)
+		# left u-shaped wall block from below
+		if self.rect.left < 384 and self.rect.left > 320 and self.rect.top < 385 and self.rect.top > 360: self.rect = self.rect.move(DOWN)
+		# entrance to top left from bottom
+		if self.rect.right > 433 and self.rect.left < 525 and self.rect.top < 193: self.rect = self.rect.move(DOWN)
+
+		''' ---------- P ---------- '''
+		# left side
+		if self.rect.right > 480 and self.rect.right < 500 and self.rect.top < 383 and self.rect.bottom > 239: self.rect = self.rect.move(LEFT)
+		# top
+		if self.rect.right > 480 and self.rect.left < 577 and self.rect.bottom > 239 and self.rect.bottom < 250: self.rect = self.rect.move(UP)
+		# lower bottom
+		if self.rect.right > 480 and self.rect.left < 528 and self.rect.top < 383 and self.rect.top > 370: self.rect = self.rect.move(DOWN)
+		# lower right
+		if self.rect.left < 527 and self.rect.left > 515 and self.rect.top < 383 and self.rect.top > 330: self.rect = self.rect.move(RIGHT)
+		# upper bottom
+		if self.rect.left > 527 and self.rect.left < 575 and self.rect.top < 333 and self.rect.top > 325: self.rect = self.rect.move(DOWN)
+		# upper right
+		if self.rect.left < 575 and self.rect.left > 569 and self.rect.top < 333 and self.rect.bottom > 239: self.rect = self.rect.move(RIGHT)
 
 
 
