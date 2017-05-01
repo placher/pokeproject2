@@ -442,11 +442,34 @@ class Player(pygame.sprite.Sprite):
 		# lower bottom
 		if self.rect.right > 480 and self.rect.left < 528 and self.rect.top < 383 and self.rect.top > 370: self.rect = self.rect.move(DOWN)
 		# lower right
-		if self.rect.left < 527 and self.rect.left > 515 and self.rect.top < 383 and self.rect.top > 330: self.rect = self.rect.move(RIGHT)
+		if self.rect.left < 527 and self.rect.left > 515 and self.rect.top < 383 and self.rect.top > 320: self.rect = self.rect.move(RIGHT)
 		# upper bottom
-		if self.rect.left > 527 and self.rect.left < 575 and self.rect.top < 333 and self.rect.top > 325: self.rect = self.rect.move(DOWN)
+		if self.rect.left > 524 and self.rect.left < 575 and self.rect.top < 333 and self.rect.top > 325: self.rect = self.rect.move(DOWN)
 		# upper right
 		if self.rect.left < 575 and self.rect.left > 569 and self.rect.top < 333 and self.rect.bottom > 239: self.rect = self.rect.move(RIGHT)
+
+		''' ---------- Bottom Left Corner ---------- '''
+
+		# exit to central right wall
+		if self.rect.right > 528 and self.rect.right < 540 and self.rect.top > 480: self.rect = self.rect.move(LEFT)
+		# exit to central top wall
+		if self.rect.right > 192 and self.rect.left < 336 and self.rect.top < 528 and self.rect.top > 518: self.rect = self.rect.move(DOWN)
+		# right cup bottom from left
+		if self.rect.right > 192 and self.rect.right < 200 and self.rect.top < 528 and self.rect.bottom > 480: self.rect = self.rect.move(LEFT)
+		# right cup bottom from above
+		if self.rect.right > 192 and self.rect.right < 310 and self.rect.bottom > 480 and self.rect.bottom < 500: self.rect = self.rect.move(UP)
+		# right cup right
+		if self.rect.right > 288 and self.rect.right < 310 and self.rect.bottom < 483 and self.rect.top > 375: self.rect = self.rect.move(LEFT)
+		# right cup top
+		if self.rect.right > 145 and self.rect.right < 290 and self.rect.top < 384 and self.rect.top > 375: self.rect = self.rect.move(DOWN)
+		# upper cup right
+		if self.rect.right > 144 and self.rect.right < 160 and self.rect.top < 384 and self.rect.top > 330: self.rect = self.rect.move(LEFT)
+		# upper cup upper
+		if self.rect.right < 145 and self.rect.left > 95 and self.rect.top < 335 and self.rect.top > 320: self.rect = self.rect.move(DOWN)
+		# upper cup left
+		if self.rect.left < 96 and self.rect.left > 85 and self.rect.top < 384 and self.rect.top > 330: self.rect = self.rect.move(RIGHT)
+		# upper left corner
+		if self.rect.left < 96 and self.rect.top < 384 and self.rect.top > 375: self.rect = self.rect.move(DOWN)
 
 
 
