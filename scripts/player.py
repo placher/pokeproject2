@@ -459,17 +459,68 @@ class Player(pygame.sprite.Sprite):
 		# right cup bottom from above
 		if self.rect.right > 192 and self.rect.right < 310 and self.rect.bottom > 480 and self.rect.bottom < 500: self.rect = self.rect.move(UP)
 		# right cup right
-		if self.rect.right > 288 and self.rect.right < 310 and self.rect.bottom < 483 and self.rect.top > 375: self.rect = self.rect.move(LEFT)
+		if self.rect.right > 287 and self.rect.right < 310 and self.rect.bottom < 483 and self.rect.top > 375: self.rect = self.rect.move(LEFT)
 		# right cup top
-		if self.rect.right > 145 and self.rect.right < 290 and self.rect.top < 384 and self.rect.top > 375: self.rect = self.rect.move(DOWN)
+		if self.rect.right > 145 and self.rect.right < 290 and self.rect.top < 384 and self.rect.top > 370: self.rect = self.rect.move(DOWN)
 		# upper cup right
 		if self.rect.right > 144 and self.rect.right < 160 and self.rect.top < 384 and self.rect.top > 330: self.rect = self.rect.move(LEFT)
 		# upper cup upper
-		if self.rect.right < 145 and self.rect.left > 95 and self.rect.top < 335 and self.rect.top > 320: self.rect = self.rect.move(DOWN)
+		if self.rect.right < 150 and self.rect.left > 85 and self.rect.top < 336 and self.rect.top > 320: self.rect = self.rect.move(DOWN)
 		# upper cup left
 		if self.rect.left < 96 and self.rect.left > 85 and self.rect.top < 384 and self.rect.top > 330: self.rect = self.rect.move(RIGHT)
 		# upper left corner
 		if self.rect.left < 96 and self.rect.top < 384 and self.rect.top > 375: self.rect = self.rect.move(DOWN)
+
+		''' ---------- Upper Central Outcropping ---------- '''
+
+		# upper outrcopping lower right
+		if self.rect.left < 528 and self.rect.left > 510 and self.rect.top < 192: self.rect = self.rect.move(RIGHT)
+		# upper outcropping upper bottom
+		if self.rect.left > 510 and self.rect.left < 624 and self.rect.top < 144 and self.rect.bottom > 150: self.rect = self.rect.move(DOWN)
+		# upper outcropping upper right
+		if self.rect.left < 624 and self.rect.left > 610 and self.rect.top < 143: self.rect = self.rect.move(RIGHT)
+
+		''' ---------- Lower Right ---------- '''
+
+		# lower outcropping top
+		if self.rect.right > 528 and self.rect.left < 672 and self.rect.bottom > 480 and self.rect.top < 470: self.rect = self.rect.move(UP)
+		# lower outcropping right
+		if self.rect.left < 672 and self.rect.left > 660 and self.rect.bottom > 480: self.rect = self.rect.move(RIGHT)
+		# I from left
+		if self.rect.right > 768 and self.rect.right < 780 and self.rect.top < 576 and self.rect.bottom > 432: self.rect = self.rect.move(LEFT)
+		# I from bottom
+		if self.rect.right > 768 and self.rect.left < 816 and self.rect.top < 576 and self.rect.top > 570: self.rect = self.rect.move(DOWN)
+		# I from right
+		if self.rect.left < 816 and self.rect.left > 800 and self.rect.top < 576 and self.rect.bottom > 432: self.rect = self.rect.move(RIGHT)
+		# I from top
+		if self.rect.right > 768 and self.rect.left < 816 and self.rect.bottom > 432 and self.rect.bottom < 440: self.rect = self.rect.move(UP)
+
+		''' ---------- J for Player 1 ---------- '''
+
+		# player 1 cannot walk on water
+		if (self.playerNum == 1):
+			
+			# lower bottom
+			if self.rect.right > 625 and self.rect.left < 768 and self.rect.top < 384 and self.rect.top > 376: self.rect = self.rect.move(DOWN)
+			# lower right
+			if self.rect.left < 768 and self.rect.left > 759 and self.rect.top < 384 and self.rect.bottom > 230: self.rect = self.rect.move(RIGHT)
+			# upper bottom
+			if self.rect.left > 760 and self.rect.left < 816 and self.rect.top < 240 and self.rect.top > 220: self.rect = self.rect.move(DOWN)
+			# upper right
+			if self.rect.left < 816 and self.rect.left > 800 and self.rect.top < 240 and self.rect.bottom > 144: self.rect = self.rect.move(RIGHT)
+			# upper top
+			if self.rect.left < 816 and self.rect.right > 720 and self.rect.bottom > 144 and self.rect.bottom < 160: self.rect = self.rect.move(UP)
+			# cup right
+			if self.rect.right > 720 and self.rect.right < 735 and self.rect.bottom > 144 and self.rect.bottom < 345: self.rect = self.rect.move(LEFT)
+			# cup bottom
+			if self.rect.right < 730 and self.rect.left > 660 and self.rect.bottom > 336 and self.rect.bottom < 350: self.rect = self.rect.move(UP)
+			# cup left
+			if self.rect.left < 672 and self.rect.left > 660 and self.rect.bottom < 350 and self.rect.bottom > 290: self.rect = self.rect.move(RIGHT)
+			# cup left top
+			if self.rect.left < 672 and self.rect.right > 624 and self.rect.bottom > 290 and self.rect.bottom < 310: self.rect = self.rect.move(UP)
+			# outside lower left
+			if self.rect.right > 624 and self.rect.right < 640 and self.rect.bottom > 290 and self.rect.top < 384: self.rect = self.rect.move(LEFT)
+		
 
 
 
