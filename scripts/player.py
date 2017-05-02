@@ -46,7 +46,7 @@ class Player(pygame.sprite.Sprite):
 		# initialize hitpoint tracker
 		self.hp = 5
 		
-		''' ---------- Write Image Defaults Based on Player # ---------- '''
+		''' ---------- Write Image Defaults Based on Player Number ---------- '''
 		
 		# player 1 information
 		if self.playerNum == 1:
@@ -75,7 +75,27 @@ class Player(pygame.sprite.Sprite):
 		# player 2 information
 		else:
 			# relative path to sprite sheet
-			sheet = '../images/totodile.png'
+			sheet = PATH+'totodile.png'
+			# spritesheet colorkey
+			colorkey = (0, 128, 128)
+			# idle animation rectangles
+			idleDownRects =			[(72, 27, 20, 20),	(96, 27, 20, 20),	(119, 23, 20, 24)]
+			idleUpRects =			[(70, 53, 20, 24),	(95, 55, 20, 21),	(119, 51, 20, 27)]
+			idleLeftRects =			[(68, 83, 23, 23),	(94, 85, 28, 20),	(123, 81, 18, 26)]
+			idleDownLeftRects =		[(70, 114, 20, 22),	(94, 115, 22, 20),	(121, 112, 20, 26)]
+			idleUpLeftRects =		[(72, 147, 18, 22),	(96, 148, 20, 22),	(121, 145, 20, 26)]
+			# movement animation rectangles
+			movementDownRects =		[(156, 24, 20, 20),		(181, 24, 20, 20),	(205, 23, 20, 20),	(181, 24, 20, 20)]
+			movementUpRects =		[(159, 51, 20, 22),		(183, 49, 18, 24),	(208, 50, 18, 22),	(183, 49, 18, 24)]
+			movementLeftRects =		[(159, 80, 22, 21),		(183, 79, 23, 22),	(209, 79, 22, 21),	(183, 79, 23, 22)]
+			movementDownLeftRects =	[(161, 110, 20, 20),	(185, 108, 20, 22),	(210, 108, 20, 21),	(185, 108, 20, 22)]
+			movementUpLeftRects =	[(163, 136, 18, 21),	(187, 136, 18, 22),	(210, 135, 20, 22),	(187, 136, 18, 22)]
+			# attack animation rectangles
+			attackDownRects =		[(243, 25, 20, 22),		(268, 25, 18, 22),	(290, 26, 19, 22),	(312, 25, 21, 23),	(338, 27, 17, 18)]
+			attackUpRects =			[(245, 53, 19, 22),		(269, 54, 19, 22),	(293, 54, 17, 21),	(314, 52, 20, 24),	(337, 52, 21, 20)]
+			attackLeftRects =		[(247, 82, 17, 21),		(267, 82, 19, 22),	(290, 82, 19, 22),	(311, 82, 26, 22),	(339, 83, 21, 19)]
+			attackDownLeftRects =	[(248, 110, 19, 22),	(271, 110, 19, 22),	(293, 109, 18, 22),	(313, 111, 22, 19),	(339, 111, 19, 18)]
+			attackUpLeftRects =		[(249, 137, 17, 22),	(269, 137, 19, 22),	(291, 137, 19, 22),	(313, 137, 22, 24),	(340, 139, 21, 18)]
 		
 		''' ---------- Load Images from Sprite Sheet ---------- '''
 		

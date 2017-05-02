@@ -32,7 +32,7 @@ class GameSpace:
 		# background image
 		self.background = background.Background()
 		# player character
-		self.player = player.Player(1, self.size, self.moveSpeed)
+		self.player = player.Player(2, self.size, self.moveSpeed)
 		# game clock
 		self.clock = pygame.time.Clock()
 		# sprite group
