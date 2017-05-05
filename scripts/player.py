@@ -626,8 +626,8 @@ class Player(pygame.sprite.Sprite):
 		
 		''' Update Variables From Network Data '''
 
-		self.move = [int(data[0]), int(data[1])]
-		self.rect = self.image.get_rect(center=[int(data[2]), int(data[3])])
+		self.move = [int(data[2]), int(data[3])]
+		self.rect = self.image.get_rect(center=[int(data[0]), int(data[1])])
 		self.walking = int(data[4])
 		self.directionChange = int(data[5])
 		self.lastDirection = data[6]
