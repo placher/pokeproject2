@@ -77,7 +77,7 @@ class GameSpace:
 		''' ---------- Initialize Network Connection ---------- '''
 
 		# initialize variable to hold connections
-		self.connection = {}
+		self.connection = {'valid':False}
 
 		if playerNum == 1:
 			# player 1 initialize host connection
@@ -154,9 +154,9 @@ class GameSpace:
 		# draw background
 		self.screen.blit(self.background.image, self.background.rect)
 		# render all game objects
-		self.playerSprites.draw(self.screen)
-		self.playerProjectiles.draw(self.screen)
-		self.enemySprites.draw(self.screen)
+		self.playerSprite.draw(self.screen)
+		self.playerProjectileSprites.draw(self.screen)
+		self.enemySprite.draw(self.screen)
 		self.enemyProjectileSprites.draw(self.screen)
 		# flip renderer
 		pygame.display.flip()
