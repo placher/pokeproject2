@@ -122,6 +122,7 @@ class GameSpace:
 		self.playerProjectileSprites.update()
 		# aggregate updated data for network connection
 		data = " ".join([str(i) for i in self.player.rect.center])
+		data += " "+" ".join([str(i) for i in self.player.move])
 		data += " "+str(self.player.walking)
 		data += " "+str(self.player.directionChange)
 		data += " "+self.player.lastDirection
@@ -129,8 +130,11 @@ class GameSpace:
 		data += " "+str(self.player.hp)
 		for i in range(4):
 			data += " "+" ".join([str(j) for j in self.playerProjectiles[i].move])
+			data += " "+" ".join([str(j) for j in self.playerProjectiles[i].rect.center])
 		# write data to connection
-		if self.connection['valid']: self.connection['connection'].transport.write(data.encode('utf-8'))
+		if self.connection['valid']: 
+			self.connection['connection'].transport.write(data.encode('utf-8'))
+			print("sent "+data)
 		self.enemySprite.update()
 		# check for collisions
 		for impact in pygame.sprite.groupcollide(self.enemyProjectileSprites, self.playerSprite, False, False).keys():

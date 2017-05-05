@@ -14,11 +14,11 @@ class HostProtocol(Protocol):
 
 	def dataReceived(self, data):
 		dataArray = data.decode('utf-8').split(" ")
-		self.enemyplayer.updateNetwork(dataArray[0:7])
-		self.enemysprites[0].updateNetwork(dataArray[7:9])
-		self.enemysprites[1].updateNetwork(dataArray[9:11])
-		self.enemysprites[2].updateNetwork(dataArray[11:13])
-		self.enemysprites[3].updateNetwork(dataArray[13:15])
+		self.enemyplayer.updateNetwork(dataArray[0:9])
+		self.enemysprites[0].updateNetwork(dataArray[9:13])
+		self.enemysprites[1].updateNetwork(dataArray[13:17])
+		self.enemysprites[2].updateNetwork(dataArray[17:21])
+		self.enemysprites[3].updateNetwork(dataArray[21:25])
 
 	def connectionMade(self):
 		print("Connected to Player2 Or Something")

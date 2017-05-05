@@ -263,6 +263,7 @@ class Projectile(pygame.sprite.Sprite):
 		''' Update Variables From Network Data '''
 
 		self.move = [int(data[0]), int(data[1])]
+		self.rect = self.image.get_rect(center=[int(data[2]), int(data[3])])
 
 
 
