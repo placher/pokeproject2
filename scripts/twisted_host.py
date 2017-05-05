@@ -8,7 +8,7 @@ from scripts import player
 
 class HostProtocol(Protocol):
 	def __init__(self, enemyplayer, enemysprites):
-		self.enemyplayer = enemyplay
+		self.enemyplayer = enemyplayer
 		self.enemysprites = enemysprites
 
 	def dataReceived(self, data):
