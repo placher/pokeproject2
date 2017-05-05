@@ -14,6 +14,7 @@ class HostProtocol(Protocol):
 
 	def dataReceived(self, data):
 		dataArray = data.decode('utf-8').split(" ")
+		print(dataArray)
 		self.enemyplayer.updateNetwork(dataArray[0:9])
 		self.enemysprites[0].updateNetwork(dataArray[9:13])
 		self.enemysprites[1].updateNetwork(dataArray[13:17])
