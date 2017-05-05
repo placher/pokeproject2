@@ -219,7 +219,7 @@ class Player(pygame.sprite.Sprite):
 				if self.currentFrame > 4:
 					self.nextFrameCounter = 0
 					self.currentFrame = 0
-					self.attacking = False
+					self.attacking = 0
 					self.walking = 0
 			if self.playerNum != 1 and self.nextFrameCounter % int(self.frameDuration/1.5) == 0:
 				if self.lastDirection == "Right":
@@ -244,7 +244,7 @@ class Player(pygame.sprite.Sprite):
 				if self.currentFrame > 4:
 					self.nextFrameCounter = 0
 					self.currentFrame = 0
-					self.attacking = False
+					self.attacking = 0
 					self.walking = 0
 		# correct walking tracker bug that can occur on transition from attacking
 		if self.walking < 0 :
@@ -258,7 +258,7 @@ class Player(pygame.sprite.Sprite):
 			if self.directionChange:
 				self.nextFrameCounter = 0
 				self.currentFrame = 0
-				self.directionChange = False
+				self.directionChange = 0
 			# advance animation to next frame cooresponding to movement direction
 			if self.move == [self.moveSpeed,0]:
 				self.lastDirection = "Right"
@@ -626,7 +626,7 @@ class Player(pygame.sprite.Sprite):
 		
 		''' Update Variables From Network Data '''
 
-		self.move = [int(data[0]), int(data[1])]
+		self.rect = self.image.get_rect(center=[int(data[0]), int(data[1])])
 		self.walking = int(data[2])
 		self.directionChange = int(data[3])
 		self.lastDirection = data[4]

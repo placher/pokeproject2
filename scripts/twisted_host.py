@@ -13,18 +13,18 @@ class HostProtocol(Protocol):
 		self.connection = connection
 
 	def dataReceived(self, data):
-		dataArray = data.split(" ")
-		self.enemyplayer.updateNetwork(dataArray[0:6])
-		self.enemysprites[0].updateNetwork(dataArray[7:8])
-		self.enemysprites[1].updateNetwork(dataArray[9:10])
-		self.enemysprites[2].updateNetwork(dataArray[11:12])
-		self.enemysprites[3].updateNetwork(dataArray[13:14])
+		dataArray = data.decode('utf-8').split(" ")
+		self.enemyplayer.updateNetwork(dataArray[0:7])
+		self.enemysprites[0].updateNetwork(dataArray[7:9])
+		self.enemysprites[1].updateNetwork(dataArray[9:11])
+		self.enemysprites[2].updateNetwork(dataArray[11:13])
+		self.enemysprites[3].updateNetwork(dataArray[13:15])
 
 	def connectionMade(self):
 		print("Connected to Player2 Or Something")
 		self.connection['valid'] = True
 
-	def connectionLost(self):
+	def connectionLost(self, reason):
 		print("Connection to Player2 Is Lost")
 		reactor.stop()
 
