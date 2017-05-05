@@ -108,10 +108,10 @@ class GameSpace:
 				# player attack animation
 				self.player.attack()
 				# fire next projectile
-				self.projectiles[self.nextProjectile].fire(self.player.rect.center, self.player.lastDirection)
+				self.playerProjectiles[self.nextProjectile].fire(self.player.rect.center, self.player.lastDirection)
 				# increment projectile counter
 				self.nextProjectile += 1
-				if self.nextProjectile == len(self.projectiles):
+				if self.nextProjectile == len(self.playerProjectiles):
 					self.nextProjectile = 0
 			elif event.type == KEYDOWN:
 				self.player.keyPressed(event)
