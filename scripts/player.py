@@ -313,7 +313,53 @@ class Player(pygame.sprite.Sprite):
 		if not self.walking and not self.attacking:
 			self.nextFrameCounter += 1
 			# cycle to next image in animation after self.frameDuration cycles
-			if self.nextFrameCounter % (self.frameDuration*4) == 0:
+			if self.playerNum == 1 and self.nextFrameCounter % (self.frameDuration*4) == 0:
+				if self.lastDirection == "Right":
+					self.image = self.idleRight[self.currentFrame]
+				elif self.lastDirection == "Left":
+					self.image = self.idleLeft[self.currentFrame]
+				elif self.lastDirection == "Up":
+					self.image = self.idleUp[self.currentFrame]
+				elif self.lastDirection == "Down":
+					self.image = self.idleDown[self.currentFrame]
+				elif self.lastDirection == "UpRight":
+					self.image = self.idleUpRight[self.currentFrame]
+				elif self.lastDirection == "UpLeft":
+					self.image = self.idleUpLeft[self.currentFrame]
+				elif self.lastDirection == "DownRight":
+					self.image= self.idleDownRight[self.currentFrame]
+				elif self.lastDirection == "DownLeft":
+					self.image = self.idleDownLeft[self.currentFrame]
+				# increment frame counter
+				self.currentFrame += 1
+				# check if animation has ended
+				if self.currentFrame > 2:
+					self.nextFrameCounter = 0
+					self.currentFrame = 0
+			elif self.playerNum != 1 and self.currentFrame == 1 and self.nextFrameCounter % (self.frameDuration*8) == 0:
+				if self.lastDirection == "Right":
+					self.image = self.idleRight[self.currentFrame]
+				elif self.lastDirection == "Left":
+					self.image = self.idleLeft[self.currentFrame]
+				elif self.lastDirection == "Up":
+					self.image = self.idleUp[self.currentFrame]
+				elif self.lastDirection == "Down":
+					self.image = self.idleDown[self.currentFrame]
+				elif self.lastDirection == "UpRight":
+					self.image = self.idleUpRight[self.currentFrame]
+				elif self.lastDirection == "UpLeft":
+					self.image = self.idleUpLeft[self.currentFrame]
+				elif self.lastDirection == "DownRight":
+					self.image= self.idleDownRight[self.currentFrame]
+				elif self.lastDirection == "DownLeft":
+					self.image = self.idleDownLeft[self.currentFrame]
+				# increment frame counter
+				self.currentFrame += 1
+				# check if animation has ended
+				if self.currentFrame > 2:
+					self.nextFrameCounter = 0
+					self.currentFrame = 0
+			elif self.playerNum != 1 and self.currentFrame != 1 and self.nextFrameCounter % (self.frameDuration*2) == 0:
 				if self.lastDirection == "Right":
 					self.image = self.idleRight[self.currentFrame]
 				elif self.lastDirection == "Left":
@@ -542,7 +588,13 @@ class Player(pygame.sprite.Sprite):
 			if self.rect.right > 624 and self.rect.right < 640 and self.rect.bottom > 290 and self.rect.top < 384: self.rect = self.rect.move(LEFT)
 		
 
+	def hit(self):
+		
+		''' Player Was Hit by Enemy Projectile '''
+		
+		''' ---------- Return Reduced HP ---------- '''
 
-
+		self.hp -= 1
+		return self.hp
 
 
