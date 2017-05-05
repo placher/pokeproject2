@@ -36,7 +36,7 @@ class Projectile(pygame.sprite.Sprite):
 		# initialize default duration for a single frame
 		self.frameDuration = 4
 
-		''' ---------- Format Sprites for Each Player ---------- '''
+		''' ---------- Load Sprites for Each Player ---------- '''
 
 		if (self.playerNum == 1):
 			# relative path to spritesheet
@@ -44,29 +44,32 @@ class Projectile(pygame.sprite.Sprite):
 			# spritesheet colorkey
 			colorkey = (0, 128, 128)
 			# sprite rectangles
-			spriteRects = [(), (), ()]
+			spriteRects = [(13, 1497, 29, 23), (55, 1495, 29, 25), (96, 1493, 26, 29)]
+			# load sprite sheet
+			ss = spritesheet.spritesheet(sheet)
+			# load sprites
+			self.spriteImages = ss.images_at(spriteRects, colorkey)
 		else :
 			# relative path to spritesheet
 			sheet = PATH+'poison_attacks.png'
 			# spritesheet colorkey
 			colorkey = (0, 128, 128)
 			# sprite rectangles
-			spriteRects = [(), (), ()]
-
-		''' ---------- Load Sprites from Spritesheet ---------- '''
-
-		# load sprite sheet
-		ss = spritesheet.spritesheet(sheet)
-		# load sprites
-		buffer = ss.images_at(spriteRects, colorkey)
-		self.spriteImages = [pygame.transform.scale2x(image) for image in buffer]
+			spriteRects = [(13, 27, 19, 22), (40, 28, 21, 20), (66, 28, 21, 20)]
+			# load sprite sheet
+			ss = spritesheet.spritesheet(sheet)
+			# load sprites
+			buffer = ss.images_at(spriteRects, colorkey)
+			self.spriteImages = [pygame.transform.scale2x(image) for image in buffer]
+		# get transparent sprite
+		self.clearImage = ss.image_at((0, 0, 2, 2), colorkey)
 
 		''' ---------- Initialize Renderable Defaults ---------- '''
 
 		# initialize image and set default
-		self.image = self.spriteImages[0]
+		self.image = self.clearImage
 		# initialize render rectangle
-		self.rect = self.image.get_rect(center=(-50,-50))
+		self.rect = self.image.get_rect(center=(2*self.size[0], 2*self.size[1]))
 
 	def update(self):
 		
@@ -99,9 +102,9 @@ class Projectile(pygame.sprite.Sprite):
 		# call collision detection function
 		self.collisionDetection()
 
-def collisionDetection(self):
+	def collisionDetection(self):
 	
-	''' Collision Detection for Walls and Water Objects on Background '''
+		''' Collision Detection for Walls and Water Objects on Background '''
 		
 		''' ---------- Maximum Border Bounds ---------- '''
 		
@@ -208,15 +211,19 @@ def collisionDetection(self):
 		if self.rect.right > 768 and self.rect.left < 816 and self.rect.bottom > 432 and self.rect.bottom < 440: self.hitSomething()
 
 	def hitSomething(self):
-		 
-		 ''' Projectile Collision Detected - Move Off Screen and Disable Movement '''
-	
+		
+		''' Projectile Collision Detected - Move Off Screen and Disable Movement '''
+		
 		# move sprite off of playable area
 		self.rect = self.rect.move(self.size)
 		# disable movement and animation
 		self.move = [0, 0]
+		# switch to transparent sprite
+		self.image = self.clearImage
+		center = self.rect.center
+		self.rect = self.image.get_rect(center=center)
 
-	def fire(self, posPlayer, fireDir):
+	def fire(self, posPlayer, lastDirection):
 
 		''' Projectile Fired: Move and Reorient Sprite and Enable Movement '''
 
@@ -227,25 +234,27 @@ def collisionDetection(self):
 		# initialize next frame counter for tracking walking frame transition
 		self.nextFrameCounter = 0
 		# enable movement
-		if self.lastDirection == "Right":
+		if lastDirection == "Right":
 			self.move = [self.moveSpeed, 0]
-		elif self.lastDirection == "Left":
+		elif lastDirection == "Left":
 			self.move = [-self.moveSpeed, 0]
-		elif self.lastDirection == "Up":
+		elif lastDirection == "Up":
 			self.move = [0, -self.moveSpeed]
-		elif self.lastDirection == "Down":
+		elif lastDirection == "Down":
 			self.move = [0, self.moveSpeed]
-		elif self.lastDirection == "UpRight":
+		elif lastDirection == "UpRight":
 			self.move = [self.moveSpeed, -self.moveSpeed]
-		elif self.lastDirection == "UpLeft":
+		elif lastDirection == "UpLeft":
 			self.move = [-self.moveSpeed, -self.moveSpeed]
-		elif self.lastDirection == "DownRight":
+		elif lastDirection == "DownRight":
 			self.move = [self.moveSpeed, self.moveSpeed]
-		elif self.lastDirection == "DownLeft":
-			self.move = [self.moveSpeed, -self.moveSpeed]
+		elif lastDirection == "DownLeft":
+			self.move = [-self.moveSpeed, self.moveSpeed]
 
 		''' ---------- Move Sprite to Player Location ---------- '''
 		
+		# equip visible sprites
+		self.image = self.spriteImages[0]
 		# move sprite
 		self.rect = self.image.get_rect(center=posPlayer)
 
