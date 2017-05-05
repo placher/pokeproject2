@@ -31,7 +31,7 @@ class ClientProtocol(Protocol):
 class ClientConnectionFactory(ClientFactory):
 
 	def __init__(self, connectionsDict, enemyPlayer, enemySprites):
-		connectionsDict['client2host'] = self.myconn = ClientProtocol(enemyPlayer, enemySprites)
+		connectionsDict['connection'] = self.myconn = ClientProtocol(enemyPlayer, enemySprites)
 
 	def buildProtocol(self, addr):
 		return self.myconn

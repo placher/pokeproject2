@@ -27,10 +27,10 @@ class HostProtocol(Protocol):
 		reactor.stop()
 
 class HostFactory(Factory):
-	def __init__(self, enemyPlayer, enemySprites):
+	def __init__(self, connection, enemyPlayer, enemySprites):
 		self.enemyPlayer = enemyPlayer
 		self.enemySprites = enemySprites
-		self.Connection = HostProtocol(self.enemyPlayer, self.enemySprites)
+		connection['connection'] = self.Connection = HostProtocol(self.enemyPlayer, self.enemySprites)
 
 	def buildProtocol(self):
 		return self.Connection

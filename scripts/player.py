@@ -38,11 +38,11 @@ class Player(pygame.sprite.Sprite):
 		# initialize default duration for a single frame
 		self.frameDuration = 8
 		# initialize tracker to reset walking frames upon direction change
-		self.directionChange = False;
+		self.directionChange = 0;
 		# initialize tracker to properly set idle sprite to correct direction
 		self.lastDirection = "Right"
 		# initialize boolean fire animation tracker
-		self.attacking = False
+		self.attacking = 0
 		# initialize hitpoint tracker
 		self.hp = 5
 		
@@ -179,7 +179,7 @@ class Player(pygame.sprite.Sprite):
 		# initialize image and set default
 		self.image = self.idleRight[0]
 		# initialize render rectangle
-		self.rect = self.image.get_rect(center=(125,80))
+		self.rect = self.image.get_rect()
 
 	def update(self):
 		
@@ -427,19 +427,19 @@ class Player(pygame.sprite.Sprite):
 		if event.key == K_UP:
 			self.walking += 1
 			self.move[1] = -self.moveSpeed
-			self.directionChange = True
+			self.directionChange =	1
 		elif event.key == K_DOWN:
 			self.walking += 1
 			self.move[1] = self.moveSpeed
-			self.directionChange = True
+			self.directionChange = 1
 		elif event.key == K_LEFT:
 			self.walking += 1
 			self.move[0] = -self.moveSpeed
-			self.directionChange = True
+			self.directionChange = 1
 		elif event.key == K_RIGHT:
 			self.walking += 1
 			self.move[0] = self.moveSpeed
-			self.directionChange = True
+			self.directionChange = 1
 
 	def keyReleased(self, event):
 		
@@ -466,7 +466,7 @@ class Player(pygame.sprite.Sprite):
 	
 		''' Place Player Object in Attack State '''
 		
-		self.attacking = True
+		self.attacking = 1
 		self.nextFrameCounter = 0
 		self.currentFrame = 0
 		self.walking = 0
