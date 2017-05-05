@@ -8,12 +8,14 @@ from scripts import player
 
 class ClientProtocol(Protocol):
 	
-	def __init__(self, enemyPlayer, enemySprites):
+	def __init__(self, enemyPlayer, enemySprites, connection):
 		self.enemyPlayer = enemyPlayer
 		self.enemySprites = enemySprites
+		self.connection = connection
 
 	def connectionMade(self): 
 		print("Connected to Player 1")
+		self.connection['valid'] = True
 
 	def dataRecieved(self, data):
 		dataArray = data.split(" ")
@@ -30,8 +32,8 @@ class ClientProtocol(Protocol):
 
 class ClientConnectionFactory(ClientFactory):
 
-	def __init__(self, connectionsDict, enemyPlayer, enemySprites):
-		connectionsDict['connection'] = self.myconn = ClientProtocol(enemyPlayer, enemySprites)
+	def __init__(self, connectionsDict, enemyPlayer, enemySprites, connection):
+		connectionsDict['connection'] = self.myconn = ClientProtocol(enemyPlayer, enemySprites, connection)
 
 	def buildProtocol(self, addr):
 		return self.myconn

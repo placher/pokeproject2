@@ -8,7 +8,6 @@ from scripts import projectile
 from scripts import twistedclient
 from scripts import twisted_host
 from twisted.internet import reactor
-from twisted.internet import task
 
 class GameSpace:
 	
@@ -134,7 +133,7 @@ class GameSpace:
 		for i in range(4):
 			data += " ".join([str(j) for j in self.playerProjectiles[i].move])
 		# write data to connection
-		self.connection['connection'].transport.write(data)
+		if self.connection['valid']: self.connection['connection'].transport.write(data)
 		self.enemySprite.update()
 		# check for collisions
 		for impact in pygame.sprite.groupcollide(self.enemyProjectileSprites, self.playerSprite, False, False).keys():

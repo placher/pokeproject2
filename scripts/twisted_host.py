@@ -7,9 +7,10 @@ from pygame.locals import *
 from scripts import player
 
 class HostProtocol(Protocol):
-	def __init__(self, enemyplayer, enemysprites):
+	def __init__(self, enemyplayer, enemysprites, connection):
 		self.enemyplayer = enemyplayer
 		self.enemysprites = enemysprites
+		self.connection = connection
 
 	def dataReceived(self, data):
 		dataArray = data.split(" ")
@@ -21,6 +22,7 @@ class HostProtocol(Protocol):
 
 	def connectionMade(self):
 		print("Connected to Player2 Or Something")
+		self.connection['valid'] = True
 
 	def connectionLost(self):
 		print("Connection to Player2 Is Lost")
@@ -30,7 +32,7 @@ class HostFactory(Factory):
 	def __init__(self, connection, enemyPlayer, enemySprites):
 		self.enemyPlayer = enemyPlayer
 		self.enemySprites = enemySprites
-		connection['connection'] = self.Connection = HostProtocol(self.enemyPlayer, self.enemySprites)
+		connection['connection'] = self.Connection = HostProtocol(self.enemyPlayer, self.enemySprites, connection)
 
-	def buildProtocol(self):
+	def buildProtocol(self, addr):
 		return self.Connection
