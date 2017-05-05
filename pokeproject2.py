@@ -89,9 +89,10 @@ class GameSpace:
 
 		''' ---------- Start Reactor Connection and Game Loop ---------- '''
 
-		# looping call for game event loop
+		'''# looping call for game event loop
 		self.gameLoop = task.LoopingCall(self.cycle)
-		self.gameLoop.start(0.1)
+		self.gameLoop.start(0.1)'''
+		reactor.callLater(0.01, self.cycle)
 		# start network reactor
 		reactor.run()
 
@@ -124,14 +125,14 @@ class GameSpace:
 		self.playerSprite.update()
 		self.playerProjectileSprites.update()
 		# aggregate updated data for network connection
-		data = " ".join(self.player.move)
+		data = " ".join([str(i) for i in self.player.move])
 		data += " "+str(self.player.walking)
 		data += " "+str(self.player.directionChange)
 		data += " "+self.player.lastDirection
 		data += " "+str(self.player.attacking)
 		data += " "+str(self.player.hp)
 		for i in range(4):
-			data += " ".join(self.playerProjectiles[i].move)
+			data += " ".join([str(j) for j in self.playerProjectiles[i].move])
 		# write data to connection
 		self.connection['connection'].transport.write(data)
 		self.enemySprite.update()
@@ -160,6 +161,7 @@ class GameSpace:
 		self.enemyProjectileSprites.draw(self.screen)
 		# flip renderer
 		pygame.display.flip()
+		reactor.callLater(0.01, self.cycle)
 
 if __name__ == '__main__':
 	gs = GameSpace()
