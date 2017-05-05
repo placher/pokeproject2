@@ -75,9 +75,7 @@ class GameSpace:
 					self.player.keyPressed(event)
 				elif event.type == KEYUP:
 					self.player.keyReleased(event)
-			
-			#elif event.type == pygame.
-			
+						
 			''' ---------- Call Tick (update) on Game Objects ---------- '''
 			
 			self.playerSprites.update()

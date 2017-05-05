@@ -44,7 +44,7 @@ class Projectile(pygame.sprite.Sprite):
 			# spritesheet colorkey
 			colorkey = (0, 128, 128)
 			# sprite rectangles
-			spriteRects = [(13, 1497, 29, 23), (55, 1495, 29, 25), (96, 1493, 26, 29)]
+			spriteRects = [(18, 1728, 29, 25), (54, 1729, 29, 25), (94, 1730, 26, 27), (133, 1732, 29, 32), (175, 1730, 29, 25), (216, 1728, 26, 29)]
 			# load sprite sheet
 			ss = spritesheet.spritesheet(sheet)
 			# load sprites
@@ -87,7 +87,7 @@ class Projectile(pygame.sprite.Sprite):
 				self.image = self.spriteImages[self.currentFrame]
 				self.currentFrame += 1
 				# loop back to begining of animation if last frame reached
-				if self.currentFrame > 2:
+				if self.currentFrame >= len(self.spriteImages):
 					self.currentFrame = 0
 
 		''' ---------- Update and Move Sprite ---------- '''
