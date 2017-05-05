@@ -261,8 +261,11 @@ class Projectile(pygame.sprite.Sprite):
 	def updateNetwork(self, data):
 		
 		''' Update Variables From Network Data '''
-
+		idle = False
+		if self.move[0] == 0 and self.move[1] == 0: idle = True
 		self.move = [int(data[0]), int(data[1])]
+		if idle and self.move[0] != 0 or self.move[1] != 0:
+			self.image = self.spriteImages[0]
 		self.rect = self.image.get_rect(center=[int(data[2]), int(data[3])])
 
 

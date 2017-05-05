@@ -28,7 +28,6 @@ class HostProtocol(Protocol):
 
 	def connectionLost(self, reason):
 		print("Connection to Player2 Is Lost")
-		reactor.stop()
 
 class HostFactory(Factory):
 	def __init__(self, connection, enemyPlayer, enemySprites):

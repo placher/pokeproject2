@@ -29,8 +29,6 @@ class ClientProtocol(Protocol):
 
 	def connectionLost(self, reason):
 		print("Player 1 Disconnected")
-		print("\nYou Win!!!\n")
-		reactor.stop()
 
 class ClientConnectionFactory(ClientFactory):
 

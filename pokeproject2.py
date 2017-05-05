@@ -139,13 +139,16 @@ class GameSpace:
 		for impact in pygame.sprite.groupcollide(self.enemyProjectileSprites, self.playerSprite, False, False).keys():
 			impact.hitSomething()
 			if (self.player.hit() == 0):
-				# enemy defeated
-				print("\nYou Lose\n")
+				# player defeated
+				print("You Lose!!!")
 				reactor.stop()
-		# check enemy hp
-		if self.enemy.hp == 0:
-			print("\nYou Win!!!\n")
-			reactor.stop()
+		for impact in pygame.sprite.groupcollide(self.playerProjectileSprites, self.enemySprite, False, False).keys():
+			impact.hitSomething()
+			if (self.enemy.hit() == 0):
+				# enemy defeated
+				print("You Win!!!")
+				reactor.stop()
+		
 		
 		''' ---------- Update Screen ---------- '''
 			
@@ -160,7 +163,7 @@ class GameSpace:
 		self.enemyProjectileSprites.draw(self.screen)
 		# flip renderer
 		pygame.display.flip()
-		reactor.callLater(0.01, self.cycle)
+		reactor.callLater(0.02, self.cycle)
 
 if __name__ == '__main__':
 	gs = GameSpace()
