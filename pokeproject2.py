@@ -23,7 +23,7 @@ class GameSpace:
 			playerNum = 1
 			enemyNum = 2
 			portNum = int(sys.argv[2])
-		elif sys.argv[2] == '-2':
+		elif sys.argv[1] == '-2':
 			# player 2
 			playerNum = 2
 			enemyNum = 1
@@ -60,9 +60,9 @@ class GameSpace:
 		self.enemy = player.Player(enemyNum, self.size, self.moveSpeed)
 		self.enemy.rect = self.enemy.rect.move((1000, 800))
 		# player projectiles
-		self.enemyProjectiles = []
+		self.playerProjectiles = []
 		for i in range(4):
-			self.projectiles.append(projectile.Projectile(playerNum, self.size, 2*self.moveSpeed))
+			self.playerProjectiles.append(projectile.Projectile(playerNum, self.size, 2*self.moveSpeed))
 		# enemy projectiles
 		self.enemyProjectiles = []
 		for i in range(4):
@@ -85,17 +85,17 @@ class GameSpace:
 			reactor.listenTCP(portNum, twisted_host.HostFactory(self.connection, self.enemy, self.enemyProjectiles))
 		else:
 			# player 2 connects
-			reactor.connectTCP(hosName, portNum, twistedclient.ClientConnectionFactory(self.connection, self.enemy, self.enemyProjectiles))
+			reactor.connectTCP(hostName, portNum, twistedclient.ClientConnectionFactory(self.connection, self.enemy, self.enemyProjectiles))
 
 		''' ---------- Start Reactor Connection and Game Loop ---------- '''
 
 		# looping call for game event loop
-		self.gameLoop = task.LoopingCall(self.tick)
-		self.gameLoop.start(0.017)
+		self.gameLoop = task.LoopingCall(self.cycle)
+		self.gameLoop.start(0.1)
 		# start network reactor
 		reactor.run()
 
-	def tick(self):
+	def cycle(self):
 		
 		''' Single Iteration of Game Loop '''
 
@@ -161,5 +161,7 @@ class GameSpace:
 		# flip renderer
 		pygame.display.flip()
 
-
+if __name__ == '__main__':
+	gs = GameSpace()
+	gs.main()
 
