@@ -622,4 +622,15 @@ class Player(pygame.sprite.Sprite):
 		self.hp -= 1
 		return self.hp
 
+	def updateNetwork(self, data):
+		
+		''' Update Variables From Network Data '''
+
+			self.move = [int(data[0]), int(data[1])]
+			self.walking = int(data[2])
+			self.directionChange = int(data[3])
+			self.lastDirection = data[4]
+			self.attacking = int(data[5])
+			self.hp = int(data[6])
+
 

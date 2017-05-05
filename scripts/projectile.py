@@ -258,6 +258,11 @@ class Projectile(pygame.sprite.Sprite):
 		# move sprite
 		self.rect = self.image.get_rect(center=posPlayer)
 
+	def updateNetwork(self, data):
+		
+		''' Update Variables From Network Data '''
+
+		self.move = [int(data[0]), int(data[1])]
 
 
 
