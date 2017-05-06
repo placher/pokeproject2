@@ -633,5 +633,6 @@ class Player(pygame.sprite.Sprite):
 		self.lastDirection = data[6]
 		self.attacking = int(data[7])
 		self.hp = int(data[8])
+		self.currentFrame = int(data[9])
 
 

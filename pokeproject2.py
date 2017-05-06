@@ -128,6 +128,7 @@ class GameSpace:
 		data += " "+self.player.lastDirection
 		data += " "+str(self.player.attacking)
 		data += " "+str(self.player.hp)
+		data += " "+str(self.player.currentFrame)
 		for i in range(4):
 			data += " "+" ".join([str(j) for j in self.playerProjectiles[i].move])
 			data += " "+" ".join([str(j) for j in self.playerProjectiles[i].rect.center])
