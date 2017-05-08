@@ -80,15 +80,16 @@ class Projectile(pygame.sprite.Sprite):
 
 		''' ---------- Update Sprite if Moving ---------- '''
 		
-		if (self.move[0] != 0 or self.move[1] != 0):
-			self.nextFrameCounter += 1
-			# cycle to next image in animation after self.frameDuration cycles
-			if self.nextFrameCounter % self.frameDuration == 0:
-				self.image = self.spriteImages[self.currentFrame]
-				self.currentFrame += 1
-				# loop back to begining of animation if last frame reached
-				if self.currentFrame >= len(self.spriteImages):
-					self.currentFrame = 0
+		self.nextFrameCounter += 1
+		# cycle to next image in animation after self.frameDuration cycles
+		if self.nextFrameCounter % self.frameDuration == 0:
+			self.image = self.spriteImages[self.currentFrame]
+			self.currentFrame += 1
+			# loop back to begining of animation if last frame reached
+			if self.currentFrame >= len(self.spriteImages):
+				self.currentFrame = 0
+		if self.move[0] == 0 and self.move[1] == 0:
+			self.image = self.clearImage
 
 		''' ---------- Update and Move Sprite ---------- '''
 
@@ -262,11 +263,14 @@ class Projectile(pygame.sprite.Sprite):
 		
 		''' Update Variables From Network Data '''
 		idle = False
-		if self.move[0] == 0 and self.move[1] == 0: idle = True
+		if self.move[0] == 0 and self.move[1] == 0:
+			idle = True
 		self.move = [int(data[0]), int(data[1])]
 		if idle and self.move[0] != 0 or self.move[1] != 0:
 			self.image = self.spriteImages[0]
-		self.rect = self.image.get_rect(center=[int(data[2]), int(data[3])])
+			self.nextFrameCounter = 0
+			self.currentFrame = 0
+			self.rect = self.image.get_rect(center=[int(data[2]), int(data[3])])
 
 
 

@@ -136,6 +136,7 @@ class GameSpace:
 		if self.connection['valid']: 
 			self.connection['connection'].transport.write(data.encode('utf-8'))
 		self.enemySprite.update()
+		self.enemyProjectileSprites.update()
 		# check for collisions
 		for impact in pygame.sprite.groupcollide(self.enemyProjectileSprites, self.playerSprite, False, False).keys():
 			impact.hitSomething()

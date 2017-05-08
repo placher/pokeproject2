@@ -487,11 +487,11 @@ class Player(pygame.sprite.Sprite):
 		# far left wall
 		if self.rect.left < 49: self.rect = self.rect.move(RIGHT)
 		# far right wall
-		if self.rect.right > 911: self.rect = self.rect.move(LEFT)
+		if self.rect.right > 911 and self.rect.right < 950: self.rect = self.rect.move(LEFT)
 		# far top wall
 		if self.rect.top < 49: self.rect = self.rect.move(DOWN)
 		# far bottom wall
-		if self.rect.bottom > 671: self.rect = self.rect.move(UP)
+		if self.rect.bottom > 671 and self.rect.bottom < 700: self.rect = self.rect.move(UP)
 
 		''' ---------- Top Left Corner ---------- '''
 
