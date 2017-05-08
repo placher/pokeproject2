@@ -19,12 +19,12 @@ class GameSpace:
 		
 		if sys.argv[1] == '-1':
 			# player 1
-			playerNum = 1
+			self.playerNum = 1
 			enemyNum = 2
 			portNum = int(sys.argv[2])
 		elif sys.argv[1] == '-2':
 			# player 2
-			playerNum = 2
+			self.playerNum = 2
 			enemyNum = 1
 			hostName = sys.argv[2]
 			portNum = int(sys.argv[3])
@@ -53,7 +53,7 @@ class GameSpace:
 		# seed RNG
 		random.seed()
 		# player character
-		self.player = player.Player(playerNum, self.size, self.moveSpeed)
+		self.player = player.Player(self.playerNum, self.size, self.moveSpeed)
 		self.player.rect = self.player.rect.move((random.randint(0, 960), random.randint(0, 720)))
 		# enemy character
 		self.enemy = player.Player(enemyNum, self.size, self.moveSpeed)
@@ -61,7 +61,7 @@ class GameSpace:
 		# player projectiles
 		self.playerProjectiles = []
 		for i in range(4):
-			self.playerProjectiles.append(projectile.Projectile(playerNum, self.size, 2*self.moveSpeed))
+			self.playerProjectiles.append(projectile.Projectile(self.playerNum, self.size, 2*self.moveSpeed))
 		# enemy projectiles
 		self.enemyProjectiles = []
 		for i in range(4):
@@ -78,8 +78,9 @@ class GameSpace:
 
 		# initialize variable to hold connections
 		self.connection = {'valid':False}
-
-		if playerNum == 1:
+		# inialize synchronization timer
+		self.syncCounter = 0
+		if self.playerNum == 1:
 			# player 1 initialize host connection
 			reactor.listenTCP(portNum, twisted_host.HostFactory(self.connection, self.enemy, self.enemyProjectiles))
 		else:
@@ -120,37 +121,50 @@ class GameSpace:
 		# update sprites
 		self.playerSprite.update()
 		self.playerProjectileSprites.update()
-		# aggregate updated data for network connection
-		data = " ".join([str(i) for i in self.player.rect.center])
-		data += " "+" ".join([str(i) for i in self.player.move])
-		data += " "+str(self.player.walking)
-		data += " "+str(self.player.directionChange)
-		data += " "+self.player.lastDirection
-		data += " "+str(self.player.attacking)
-		data += " "+str(self.player.hp)
-		data += " "+str(self.player.currentFrame)
-		for i in range(4):
-			data += " "+" ".join([str(j) for j in self.playerProjectiles[i].move])
-			data += " "+" ".join([str(j) for j in self.playerProjectiles[i].rect.center])
-		# write data to connection
-		if self.connection['valid']: 
-			self.connection['connection'].transport.write(data.encode('utf-8'))
 		self.enemySprite.update()
 		self.enemyProjectileSprites.update()
 		# check for collisions
+		playerDead = 0
 		for impact in pygame.sprite.groupcollide(self.enemyProjectileSprites, self.playerSprite, False, False).keys():
 			impact.hitSomething()
 			if (self.player.hit() == 0):
 				# player defeated
-				print("You Lose!!!")
-				reactor.stop()
+				if self.playerNum == 1:
+					print("You Lose!!!")
+					playerDead = 1
+					self.syncCounter = 30
 		for impact in pygame.sprite.groupcollide(self.playerProjectileSprites, self.enemySprite, False, False).keys():
 			impact.hitSomething()
 			if (self.enemy.hit() == 0):
 				# enemy defeated
-				print("You Win!!!")
-				reactor.stop()
-		
+				if self.playerNum == 1:
+					print("You Win!!!")
+					playerDead = 2
+					self.syncCounter = 30
+		# increment synchronization counter
+		self.syncCounter += 1
+		if self.syncCounter >= 20:
+			# reset counter
+			self.syncCounter = 0
+			# aggregate updated data for network connection
+			data = " ".join([str(i) for i in self.player.rect.center])
+			data += " "+" ".join([str(i) for i in self.player.move])
+			data += " "+str(self.player.walking)
+			data += " "+str(self.player.directionChange)
+			data += " "+self.player.lastDirection
+			data += " "+str(self.player.attacking)
+			data += " "+str(self.player.hp)
+			data += " "+str(self.player.currentFrame)
+			for i in range(4):
+				data += " "+" ".join([str(j) for j in self.playerProjectiles[i].move])
+				data += " "+" ".join([str(j) for j in self.playerProjectiles[i].rect.center])
+			if playerDead != 0:
+				# game end results for player 2
+				if playerDead == 1: data += " Win"
+				elif playerDead == 2: data += " Lose"
+			# write data to connection
+			if self.connection['valid']: 
+				self.connection['connection'].transport.write(data.encode('utf-8'))
 		
 		''' ---------- Update Screen ---------- '''
 			
@@ -165,7 +179,7 @@ class GameSpace:
 		self.enemyProjectileSprites.draw(self.screen)
 		# flip renderer
 		pygame.display.flip()
-		reactor.callLater(0.02, self.cycle)
+		reactor.callLater(0.01667, self.cycle)
 
 if __name__ == '__main__':
 	gs = GameSpace()

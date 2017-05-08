@@ -21,11 +21,15 @@ class HostProtocol(Protocol):
 		self.enemysprites[3].updateNetwork(dataArray[22:26])
 
 	def connectionMade(self):
-		print("Connected to Player2 Or Something")
+		print("Connected to Player 2")
 		self.connection['valid'] = True
-
+	
 	def connectionLost(self, reason):
-		print("Connection to Player2 Is Lost")
+		print("Connection to Player 2 Is Lost")
+		try:
+			reactor.stop()
+		except:
+			nothing = "nothing"
 
 class HostFactory(Factory):
 	def __init__(self, connection, enemyPlayer, enemySprites):

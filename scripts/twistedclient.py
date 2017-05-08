@@ -24,6 +24,12 @@ class ClientProtocol(Protocol):
 		self.enemysprites[1].updateNetwork(dataArray[14:18])
 		self.enemysprites[2].updateNetwork(dataArray[18:22])
 		self.enemysprites[3].updateNetwork(dataArray[22:26])
+		if len(dataArray) >= 27:
+			print("You "+str(dataArray[26])+"!!!")
+			try:
+				reactor.stop()
+			except:
+				nothing = "nothing"
 
 	def connectionLost(self, reason):
 		print("Player 1 Disconnected")
